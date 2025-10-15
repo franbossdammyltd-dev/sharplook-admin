@@ -72,6 +72,7 @@ const Services = () => {
         "/admin/getAllServiceCategory"
       );
 
+   
       if (response.data.success) {
         setServices(response.data.data);
       } else {
@@ -131,12 +132,19 @@ const Services = () => {
   );
 
   // Filtered and paginated data for listings
+  // const filteredListings = serviceListings.filter(
+  //   (listing) =>
+  //     listing.serviceName.toLowerCase().includes(search.toLowerCase()) ||
+  //     listing.vendor.firstName.toLowerCase().includes(search.toLowerCase()) ||
+  //     listing.vendor.lastName.toLowerCase().includes(search.toLowerCase()) ||
+  //     listing.vendor.email.toLowerCase().includes(search.toLowerCase())
+  // );
   const filteredListings = serviceListings.filter(
     (listing) =>
       listing.serviceName.toLowerCase().includes(search.toLowerCase()) ||
-      listing.vendor.firstName.toLowerCase().includes(search.toLowerCase()) ||
-      listing.vendor.lastName.toLowerCase().includes(search.toLowerCase()) ||
-      listing.vendor.email.toLowerCase().includes(search.toLowerCase())
+      listing.vendor?.firstName?.toLowerCase().includes(search.toLowerCase()) ||
+      listing.vendor?.lastName?.toLowerCase().includes(search.toLowerCase()) ||
+      listing.vendor?.email?.toLowerCase().includes(search.toLowerCase())
   );
   const totalListings = filteredListings.length;
   const totalPagesListings = Math.ceil(totalListings / rowsPerPage);
@@ -202,12 +210,19 @@ const Services = () => {
         </td>
         <td className="p-3 text-[14px] font-poppins-medium">
           <div>
-            <div className="font-poppins-medium text-gray-800 text-[14px]">
+            {/* <div className="font-poppins-medium text-gray-800 text-[14px]">
               {listing.vendor.firstName} {listing.vendor.lastName}
             </div>
             <div className="text-[12px] font-poppins-regular text-[#80808099]">
               {listing.vendor.email}
+            </div> */}
+            <div className="font-poppins-medium text-gray-800 text-[14px]">
+              {listing.vendor ? `${listing.vendor.firstName} ${listing.vendor.lastName}` : "N/A"}
             </div>
+            <div className="text-[12px] font-poppins-regular text-[#80808099]">
+              {listing.vendor?.email || "No Email"}
+            </div>
+
           </div>
         </td>
         <td className="p-3">
@@ -223,6 +238,73 @@ const Services = () => {
       </tr>
     ));
   };
+
+// updated service listings table
+// Render service listings table (safe version)
+// const renderServiceListings = () => {
+//   return paginatedListings.map((listing: ServiceListing) => {
+//     const vendorName = listing.vendor
+//       ? `${listing.vendor.firstName || ""} ${listing.vendor.lastName || ""}`.trim()
+//       : "N/A";
+//     const vendorEmail = listing.vendor?.email || "No Email";
+//     const serviceImageSrc =
+//       listing.serviceImage || "/src/assets/img/sharplooklogo.svg";
+
+//     return (
+//       <tr
+//         key={listing.id}
+//         className="border-b border-[#E4E4EF] last:border-b-0 hover:bg-[#F9F9F9]"
+//       >
+//         <td className="p-3 flex text-[14px] items-center gap-3 min-w-[220px] font-poppins-medium">
+//           <img
+//             src={serviceImageSrc}
+//             alt={listing.serviceName || "Service"}
+//             className="w-10 h-10 rounded-full object-cover border border-[#0000001A]"
+//             onError={(e) => {
+//               const target = e.target as HTMLImageElement;
+//               target.src = "/src/assets/img/sharplooklogo.svg";
+//             }}
+//           />
+//           <div>
+//             <div className="font-poppins-medium text-gray-800 text-[14px]">
+//               {listing.serviceName || "No Name"}
+//             </div>
+//             <div className="text-[12px] font-poppins-regular text-[#80808099]">
+//               {listing.description || "No Description"}
+//             </div>
+//           </div>
+//         </td>
+//         <td className="p-3 text-[14px] font-poppins-medium">
+//           {listing.createdAt ? formatDate(listing.createdAt) : "N/A"}
+//         </td>
+//         <td className="p-3 text-[14px] font-poppins-medium">
+//           {listing.servicePrice != null ? formatCurrency(listing.servicePrice) : "N/A"}
+//         </td>
+//         <td className="p-3 text-[14px] font-poppins-medium">
+//           <div>
+//             <div className="font-poppins-medium text-gray-800 text-[14px]">
+//               {vendorName}
+//             </div>
+//             <div className="text-[12px] font-poppins-regular text-[#80808099]">
+//               {vendorEmail}
+//             </div>
+//           </div>
+//         </td>
+//         <td className="p-3">
+//           <button
+//             className="bg-pink-100 px-5 py-1.5 cursor-pointer rounded text-pink-600 font-medium hover:bg-pink-200 transition"
+//             onClick={() =>
+//               navigate("/services/detail", { state: { service: listing } })
+//             }
+//           >
+//             View
+//           </button>
+//         </td>
+//       </tr>
+//     );
+//   });
+// };
+
 
   // Render service categories table
   const renderServiceCategories = () => {
@@ -421,21 +503,19 @@ const Services = () => {
             {/* Tabs */}
             <div className="flex gap-2 border-b border-[#E4E4EF] pb-4 mb-4">
               <button
-                className={`px-5 py-2 font-semibold cursor-pointer rounded-full focus:outline-none transition text-[15px] ${
-                  activeTab === "categories"
+                className={`px-5 py-2 font-semibold cursor-pointer rounded-full focus:outline-none transition text-[15px] ${activeTab === "categories"
                     ? "bg-[#EFF2F6] text-black"
                     : "text-[#C5C5C5]"
-                }`}
+                  }`}
                 onClick={() => setActiveTab("categories")}
               >
                 Service Categories
               </button>
               <button
-                className={`px-5 py-2 font-semibold cursor-pointer rounded-full focus:outline-none transition text-[15px] ${
-                  activeTab === "listings"
+                className={`px-5 py-2 font-semibold cursor-pointer rounded-full focus:outline-none transition text-[15px] ${activeTab === "listings"
                     ? "bg-[#EFF2F6] text-black"
                     : "text-[#C5C5C5]"
-                }`}
+                  }`}
                 onClick={() => setActiveTab("listings")}
               >
                 Service Listed
@@ -507,11 +587,10 @@ const Services = () => {
                 {[...Array(totalPages).keys()].slice(0, 3).map((i) => (
                   <button
                     key={i + 1}
-                    className={`px-3 py-1 rounded border ${
-                      page === i + 1
+                    className={`px-3 py-1 rounded border ${page === i + 1
                         ? "border-pink-600 bg-pink-600 text-white"
                         : "border-gray-200 bg-white"
-                    }`}
+                      }`}
                     onClick={() => setPage(i + 1)}
                   >
                     {i + 1}
