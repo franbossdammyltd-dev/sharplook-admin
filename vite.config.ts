@@ -46,16 +46,12 @@ export default defineConfig({
     host: "0.0.0.0",
     port: Number(process.env.PORT) || 10000, // ✅ safe and clean
     allowedHosts: [
-      "sharplook-admin-1zea.onrender.com",
+      // "sharplook-admin-1zea.onrender.com",
+      "sharplook-backend-ef2w.onrender.com",
       "localhost",
     ],
   },
 
 
-// preview: {
-//   host: "0.0.0.0",
-//   port: Number(process.env.PORT) || 10000,
-//   allowedHosts: ["*"], // ✅ allow all hosts
-// },
 
 });

@@ -6,6 +6,7 @@ import { useToast } from "../../components/useToast";
 import { ScaleLoader } from "react-spinners";
 import { HexConverter } from "../../components/HexConverter";
 import { AxiosError } from "axios";
+// import ProductDetail from './ProductDetail';
 
 // Define types based on API response
 interface Product {
@@ -60,11 +61,14 @@ const Product = () => {
       setError(null);
       try {
         const response = await HttpClient.get("/admin/products");
+          console.log("babababa", response)
+
         if (response.data.success) {
           const responseData = response.data.data as ApiResponse["data"];
 
           // Combine all products from different approval statuses
           let allProducts: Product[] = [];
+
 
           if (responseData.PENDING) {
             allProducts = [...allProducts, ...responseData.PENDING];
@@ -383,6 +387,8 @@ const Product = () => {
           </div>
         </div>
       </div>
+      // <div> new ProductDetail </div>
+
     );
   };
 
